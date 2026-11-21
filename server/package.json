@@ -1,0 +1,9 @@
+{
+  "name": "collaborative-whiteboard-server",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "mongoose": "^8.19.1"
+  }
+}
