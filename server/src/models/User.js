@@ -11,40 +11,33 @@ export const userSchema = new Schema(
       minlength: 1,
       maxlength: 80,
     },
-    userType: {
+    email:{
       type: String,
-      enum: ['guest'],
-      default: 'guest',
+      required: true,
+      trim: true,
+      unique: true,
+    },
+    hashed_password: {
+      type: String,
       required: true,
     },
-    avatar: {
+    userType: {
       type: String,
-      trim: true,
-      default: undefined,
+      default: 'Registered',
+      required: true,
     },
     isActive: {
       type: Boolean,
       default: true,
       required: true,
     },
-    lastActiveAt: {
+    createdAt: {
       type: Date,
       default: Date.now,
       required: true,
-    },
-    expiresAt: {
-      type: Date,
-      default: undefined,
-    },
-  },
-  {
-    collection: 'users',
-    timestamps: { createdAt: true, updatedAt: false },
-    versionKey: false,
+    }
   },
 );
-
-userSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
 
 const User = mongoose.models.User ?? mongoose.model('User', userSchema);
 
