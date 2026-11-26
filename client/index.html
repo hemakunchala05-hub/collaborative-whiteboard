@@ -1,6 +1,96 @@
 <!doctype html>
 <html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Collaborative Whiteboard</title>
+  </head>
   <body>
-    <script type="module" src="/src/services/socketService.js"></script>
+    <main>
+      <header class="page-header">
+        <p class="eyebrow">COLLABORATIVE CANVAS</p>
+        <h1>Make space for ideas.</h1>
+        <p class="intro">Sign in to start a whiteboard or join one with a room code.</p>
+      </header>
+
+      <section class="auth-grid" aria-label="Account access">
+        <form id="login-form" class="panel">
+          <h2>Welcome back</h2>
+          <label>
+            Email
+            <input name="email" type="email" autocomplete="email" required />
+          </label>
+          <label>
+            Password
+            <input name="password" type="password" autocomplete="current-password" required />
+          </label>
+          <button type="submit">Sign in</button>
+        </form>
+
+        <form id="register-form" class="panel">
+          <h2>Create an account</h2>
+          <label>
+            Display name
+            <input name="displayName" minlength="2" maxlength="80" autocomplete="name" required />
+          </label>
+          <label>
+            Email
+            <input name="email" type="email" autocomplete="email" required />
+          </label>
+          <label>
+            Password
+            <input name="password" type="password" minlength="8" maxlength="128" autocomplete="new-password" required />
+          </label>
+          <button class="secondary-button" type="submit">Register</button>
+        </form>
+      </section>
+
+      <section id="room-actions" class="panel room-panel" aria-labelledby="room-heading" hidden>
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">YOUR NEXT SESSION</p>
+            <h2 id="room-heading">Rooms</h2>
+          </div>
+          <button id="logout-button" class="text-button" type="button" disabled>Log out</button>
+        </div>
+        <div class="room-actions-grid">
+          <div class="room-action">
+            <h3>Start a room</h3>
+            <p>Create a room and share its code with your team.</p>
+            <button id="create-room-button" type="button">Create room</button>
+          </div>
+          <form id="join-room-form" class="room-action">
+            <h3>Join a room</h3>
+            <p>Enter the code shared by the room host.</p>
+            <label>
+              Room code
+              <input name="roomCode" maxlength="32" autocomplete="off" required />
+            </label>
+            <button class="secondary-button" type="submit">Join room</button>
+          </form>
+        </div>
+        <div id="room-result" class="room-result" aria-live="polite"></div>
+        <section id="pending-requests-panel" class="pending-panel" aria-labelledby="pending-requests-heading" hidden>
+          <div class="pending-heading">
+            <h3 id="pending-requests-heading">Waiting room requests</h3>
+            <button id="refresh-requests-button" class="secondary-button" type="button">Refresh</button>
+          </div>
+          <p id="pending-requests-empty">There are no pending requests.</p>
+          <ul id="pending-requests-list"></ul>
+        </section>
+        <section id="room-members-panel" class="members-panel" aria-labelledby="room-members-heading" hidden>
+          <h3 id="room-members-heading">People in this room</h3>
+          <ul id="room-members-list"></ul>
+        </section>
+        <div id="room-draw-status" class="draw-status" hidden></div>
+        <div id="active-room-controls" class="active-room-controls" hidden>
+          <button id="leave-room-button" class="secondary-button" type="button">Leave room</button>
+          <button id="end-meeting-button" class="danger-button" type="button" hidden>End meeting</button>
+        </div>
+      </section>
+
+      <p id="status" class="status" role="status" aria-live="polite">Not connected</p>
+    </main>
+    <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

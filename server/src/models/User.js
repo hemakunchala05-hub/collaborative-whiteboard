@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 const { Schema } = mongoose;
 
@@ -8,22 +8,30 @@ export const userSchema = new Schema(
       type: String,
       required: true,
       trim: true,
-      minlength: 1,
+      minlength: 2,
       maxlength: 80,
     },
-    email:{
+    email: {
       type: String,
       required: true,
       trim: true,
+      lowercase: true,
+      maxlength: 254,
       unique: true,
     },
     hashed_password: {
       type: String,
       required: true,
+      select: false,
     },
     userType: {
       type: String,
       default: 'Registered',
+      required: true,
+    },
+    tokenVersion: {
+      type: Number,
+      default: 0,
       required: true,
     },
     isActive: {
@@ -39,6 +47,6 @@ export const userSchema = new Schema(
   },
 );
 
-const User = mongoose.models.User ?? mongoose.model('User', userSchema);
+const User = mongoose.models.User ?? mongoose.model("User", userSchema);
 
 export default User;

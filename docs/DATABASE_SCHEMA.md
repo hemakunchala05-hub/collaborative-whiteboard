@@ -14,8 +14,11 @@ service layer.
   it, so retention must account for room and replay history.
 - **rooms** — room code and name, host, member and join-request subdocuments,
   presenter, permissions, settings, status, and lifecycle dates. Membership
-  roles are `host`, `presenter`, or `participant`; connection states are
-  `online` or `offline`.
+  roles are `host`, `presenter`, or `participant`; membership states are
+  `waiting`, `accepted`, or `left`; connection states are `online` or
+  `offline`. Drawing permission is stored per member in `canDraw`; presenter
+  designation is separate and limited to the room's single `presenterId`.
+  Pending join requests remain in `pendingRequests` until accepted or withdrawn.
 - **boards** — one board per room, enforced by a unique `roomId` index. A board
   stores structured drawing elements, viewport, version, and `updatedAt`.
   Supported element types are `freehand`, `rectangle`, `circle`, `line`, `text`,

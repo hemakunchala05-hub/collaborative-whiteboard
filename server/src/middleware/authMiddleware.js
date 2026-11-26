@@ -1,28 +1,28 @@
-import jwt from "jsonwebtoken";
+import ApiError from "../utils/ApiError.js";
+import { authenticateToken } from "../services/tokenService.js";
 
-export default function verifyToken(req, res, next) {
-  const match = req.get("authorization")?.match(/^Bearer\s+(.+)$/i);
+export default async function verifyToken(req, res, next) {
+  const match = req.get("authorization")?.match(/^Bearer\s+(\S+)$/i);
   const token = match?.[1];
 
   if (!token) {
-    return res.status(401).json({ error: "Bearer token required" });
-  }
-
-  const secret = process.env.JWT_SECRET;
-  if (!secret) {
-    return res.status(500).json({ error: "Authentication is not configured" });
+    return res.status(401).json({
+      error: "Bearer token required",
+      code: "AUTH_REQUIRED",
+    });
   }
 
   try {
-    const decoded = jwt.verify(token, secret);
-
-    if (typeof decoded === "string" || typeof decoded.sub !== "string") {
-      return res.status(401).json({ error: "Invalid token" });
+    req.user = await authenticateToken(token);
+    req.userId = req.user.id;
+    return next();
+  } catch (error) {
+    if (error instanceof ApiError) {
+      return res.status(error.statusCode).json({
+        error: error.message,
+        code: error.code,
+      });
     }
-
-    req.userId = decoded.sub;
-    next();
-  } catch {
-    return res.status(401).json({ error: "Invalid or expired token" });
+    return next(error);
   }
 }
